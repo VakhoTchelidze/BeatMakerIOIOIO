@@ -30,6 +30,7 @@ HEIGHT = 800
 fps = 60
 timer = pygame.time.Clock()
 beats = 8
+beatsadd = 1
 instruments = 6
 boxes = []
 clicked = [[-1 for _ in range(beats)] for _ in range(instruments)]
@@ -44,13 +45,18 @@ beat_changed = True
 save_menu = False
 load_menu = False
 saved_beats = []
-file = open('beats.txt','r')
+file = open('saved_beats.txt','r')
 for line in file:
     saved_beats.append(line)
 beat_name = ''
 typing = False
 index = 100
 
+#mode gilakis parametrebi
+georgian = True
+hiphop = False
+soul = False
+mode_menu = False
 
 #screen da fonti
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
@@ -59,12 +65,20 @@ label_font = pygame.font.Font('fast99.ttf', 30)
 medium_font = pygame.font.Font('fast99.ttf', 24)
 
 #soundebi
-hihat = mixer.Sound('sounds\hi hat.WAV')
-snare = mixer.Sound('sounds\snare.WAV')
-kick = mixer.Sound('sounds\kick.WAV')
-crash = mixer.Sound('sounds\crash.wav')
-clap = mixer.Sound('sounds\clap.wav')
-tom = mixer.Sound('sounds\\tom.WAV')
+sound1 = mixer.Sound('sounds\georgian\sound1.wav')
+sound2 = mixer.Sound('sounds\georgian\sound2.wav')
+sound3 = mixer.Sound('sounds\georgian\sound3.wav')
+sound4 = mixer.Sound('sounds\georgian\sound4.wav')
+sound5 = mixer.Sound('sounds\georgian\sound5.wav')
+sound6 = mixer.Sound('sounds\georgian\sound6.wav')
+
+#soundebis saxelebi
+sound1_name = 'Doli'
+sound2_name = 'Doli2'
+sound3_name = 'Doli3'
+sound4_name = 'Duduki'
+sound5_name = 'Acharuli'
+sound6_name = 'Fanduri'
 
 pygame.mixer.set_num_channels(instruments * 3)
 
@@ -72,23 +86,76 @@ def play_notes():
     for i in range(len(clicked)):
         if clicked[i][active_beat] == 1 and active_list[i] == 1:
             if i == 0:
-                hihat.stop()
-                hihat.play()
+                sound1.stop()
+                sound1.play()
             if i == 1:
-                snare.stop()
-                snare.play()
+                sound2.stop()
+                sound2.play()
             if i == 2:
-                kick.stop()
-                kick.play()
+                sound3.stop()
+                sound3.play()
             if i == 3:
-                crash.stop()
-                crash.play()
+                sound4.stop()
+                sound4.play()
             if i == 4:
-                clap.stop()
-                clap.play()
+                sound5.stop()
+                sound5.play()
             if i == 5:
-                tom.stop()
-                tom.play()
+                sound6.stop()
+                sound6.play()
+
+def set_mode_opt(georgian_mode,hiphop_mode,soul_mode):
+    if georgian_mode:
+        sound1_name = 'Doli'
+        sound2_name = 'Doli2'
+        sound3_name = 'Doli3'
+        sound4_name = 'Duduki'
+        sound5_name = 'Acharuli'
+        sound6_name = 'Fanduri'
+
+        sound1 = mixer.Sound('sounds\georgian\sound1.wav')
+        sound2 = mixer.Sound('sounds\georgian\sound2.wav')
+        sound3 = mixer.Sound('sounds\georgian\sound3.wav')
+        sound4 = mixer.Sound('sounds\georgian\sound4.wav')
+        sound5 = mixer.Sound('sounds\georgian\sound5.wav')
+        sound6 = mixer.Sound('sounds\georgian\sound6.wav')
+
+
+
+    elif hiphop_mode:
+        sound1_name = 'Kick'
+        sound2_name = 'Hihat'
+        sound3_name = 'Snare'
+        sound4_name = 'Bass'
+        sound5_name = 'Impact'
+        sound6_name = 'Vocal'
+
+        sound1 = mixer.Sound('sounds\hiphop\sound1.wav')
+        sound2 = mixer.Sound('sounds\hiphop\sound2.wav')
+        sound3 = mixer.Sound('sounds\hiphop\sound3.wav')
+        sound4 = mixer.Sound('sounds\hiphop\sound4.wav')
+        sound5 = mixer.Sound('sounds\hiphop\sound5.wav')
+        sound6 = mixer.Sound('sounds\hiphop\sound6.wav')
+
+
+
+    elif soul_mode:
+        sound1_name = 'Loop'
+        sound2_name = 'Kick'
+        sound3_name = 'Snare'
+        sound4_name = 'HiHat'
+        sound5_name = 'String'
+        sound6_name = 'Bells'
+
+        sound1 = mixer.Sound('sounds\soul\sound1.wav')
+        sound2 = mixer.Sound('sounds\soul\sound2.wav')
+        sound3 = mixer.Sound('sounds\soul\sound3.wav')
+        sound4 = mixer.Sound('sounds\soul\sound4.wav')
+        sound5 = mixer.Sound('sounds\soul\sound5.wav')
+        sound6 = mixer.Sound('sounds\soul\sound6.wav')
+
+
+    return sound1, sound2, sound3, sound4, sound5, sound6, sound1_name, sound2_name, sound3_name, sound4_name, sound5_name, sound6_name
 def draw_grid(clicks, beat, activelst):
     boxes = []
     left_box = pygame.draw.rect(screen, gray, [0, 0, 200, HEIGHT - 200], 5)
@@ -96,18 +163,18 @@ def draw_grid(clicks, beat, activelst):
     colors = [gray, white, gray]
 
     #instrumentebis dasaxelebebi
-    hi_hat_text = label_font.render('Doli', True, colors[activelst[0]])
-    screen.blit(hi_hat_text, (30, 30))
-    snare_text = label_font.render('Doli2', True, colors[activelst[1]])
-    screen.blit(snare_text, (30, 130))
-    kick_text = label_font.render('Doli3', True, colors[activelst[2]])
-    screen.blit(kick_text, (30, 230))
-    crash_text = label_font.render('Duduki', True, colors[activelst[3]])
-    screen.blit(crash_text, (30, 330))
-    clap_text = label_font.render('Acharuli', True, colors[activelst[4]])
-    screen.blit(clap_text, (30, 430))
-    tom_text = label_font.render('Fanduri', True, colors[activelst[5]])
-    screen.blit(tom_text, (30, 530))
+    sound1_text = label_font.render(sound1_name, True, colors[activelst[0]])
+    screen.blit(sound1_text, (30, 30))
+    sound2_text = label_font.render(sound2_name, True, colors[activelst[1]])
+    screen.blit(sound2_text, (30, 130))
+    sound3_text = label_font.render(sound3_name, True, colors[activelst[2]])
+    screen.blit(sound3_text, (30, 230))
+    sound4_text = label_font.render(sound4_name, True, colors[activelst[3]])
+    screen.blit(sound4_text, (30, 330))
+    sound5_text = label_font.render(sound5_name, True, colors[activelst[4]])
+    screen.blit(sound5_text, (30, 430))
+    sound6_text = label_font.render(sound6_name, True, colors[activelst[5]])
+    screen.blit(sound6_text, (30, 530))
 
     #xazebi insturmentebs shoris
     for i in range(6):
@@ -216,6 +283,48 @@ def draw_load_menu(index):
     return exit_btn, loading_btn, delete_btn, loaded_rectangle, loaded_info
 
 
+def draw_mode_menu():
+
+    pygame.draw.rect(screen, red, (0, 0, WIDTH, HEIGHT))
+    menu_text = label_font.render('CHOOSE MODE', True, white)
+    screen.blit(menu_text, (550, 25))
+
+    exit_btn = pygame.draw.rect(screen, gray, [WIDTH - 200, HEIGHT - 100, 180, 90], 0, 5)
+    exit_text = label_font.render('Close', True, white)
+    screen.blit(exit_text, (WIDTH - 160, HEIGHT - 70))
+
+    georgian_mode_btn = pygame.draw.rect(screen, gray, [520, 150, 300, 100], 0, 5)
+    georgian_mode_text = label_font.render('GEORGIAN',True,white)
+    screen.blit(georgian_mode_text, (590, 185))
+
+    hiphop_mode_btn = pygame.draw.rect(screen, gray, [520, 275, 300, 100], 0, 5)
+    hiphop_mode_text = label_font.render('HIP-HOP', True, white)
+    screen.blit(hiphop_mode_text, (610, 310))
+
+    soul_mode_btn = pygame.draw.rect(screen, gray, [520, 400, 300, 100], 0, 5)
+    soul_mode_text = label_font.render('TALE', True, white)
+    screen.blit(soul_mode_text, (640, 435))
+
+    return exit_btn , georgian_mode_btn, hiphop_mode_btn, soul_mode_btn
+
+
+def bpm_button():
+
+    bpm_rect = pygame.draw.rect(screen, gray, [300, HEIGHT - 150, 200, 100], 5, 5)
+    bpm_text = medium_font.render('BPM', True, white)
+    screen.blit(bpm_text, (370, HEIGHT - 130))
+    bpm_text2 = label_font.render(f'{bpm}', True, white)
+    screen.blit(bpm_text2, (370, HEIGHT - 100))
+    bpm_add_rect = pygame.draw.rect(screen, gray, [510, HEIGHT - 150, 48, 48], 0, 5)
+    bpm_sub_rect = pygame.draw.rect(screen, gray, [510, HEIGHT - 100, 48, 48], 0, 5)
+    add_text = medium_font.render('+5', True, white)
+    sub_text = medium_font.render('-5', True, white)
+    screen.blit(add_text, (520, HEIGHT - 140))
+    screen.blit(sub_text, (520, HEIGHT - 90))
+    return bpm_rect,bpm_sub_rect,bpm_add_rect
+
+
+
 #mtavari loopi
 run = True
 while run:
@@ -233,18 +342,7 @@ while run:
         play_text2 = medium_font.render('Paused', True, dark_gray)
     screen.blit(play_text2, (70, HEIGHT - 100))
 
-    #bpms gilaki
-    bpm_rect = pygame.draw.rect(screen, gray, [300, HEIGHT-150, 200, 100], 5, 5)
-    bpm_text = medium_font.render('BPM',True, white)
-    screen.blit(bpm_text, (370, HEIGHT - 130))
-    bpm_text2 = label_font.render(f'{bpm}',True, white)
-    screen.blit(bpm_text2,(370, HEIGHT-100))
-    bpm_add_rect = pygame.draw.rect(screen, gray, [510, HEIGHT - 150, 48, 48], 0, 5)
-    bpm_sub_rect = pygame.draw.rect(screen, gray, [510, HEIGHT - 100, 48, 48], 0, 5)
-    add_text = medium_font.render('+5',True, white)
-    sub_text = medium_font.render('-5', True, white)
-    screen.blit(add_text, (520, HEIGHT-140))
-    screen.blit(sub_text, (520, HEIGHT - 90))
+
 
     #Beatsis gilaki
     beats_rect = pygame.draw.rect(screen, gray, [600, HEIGHT - 150, 200, 100], 5, 5)
@@ -254,8 +352,8 @@ while run:
     screen.blit(beats_text2, (690, HEIGHT - 100))
     beats_add_rect = pygame.draw.rect(screen, gray, [810, HEIGHT - 150, 48, 48], 0, 5)
     beats_sub_rect = pygame.draw.rect(screen, gray, [810, HEIGHT - 100, 48, 48], 0, 5)
-    beats_add_text = medium_font.render('+1', True, white)
-    beats_sub_text = medium_font.render('-1', True, white)
+    beats_add_text = medium_font.render(f'+{beatsadd}', True, white)
+    beats_sub_text = medium_font.render(f'-{beatsadd}', True, white)
     screen.blit(beats_add_text, (820, HEIGHT - 140))
     screen.blit(beats_sub_text, (820, HEIGHT - 90))
 
@@ -276,9 +374,19 @@ while run:
     screen.blit(load_text, (940, HEIGHT - 90))
 
     #boardis gasuftaveba
-    clear_button = pygame.draw.rect(screen, gray, [1150, HEIGHT-150, 200, 100],5,5)
+    clear_button = pygame.draw.rect(screen, gray, [1150, HEIGHT-150, 200, 48],5,5)
     clear_text = label_font.render('Clear', True, white)
-    screen.blit(clear_text, (1210, HEIGHT - 115))
+    screen.blit(clear_text, (1210, HEIGHT - 140))
+
+    #mode gilaki
+    mode_btn = pygame.draw.rect(screen, gray, [1150, HEIGHT - 100, 200, 48], 5, 5)
+    mode_text = label_font.render('Mode', True, white)
+    screen.blit(mode_text, (1210, HEIGHT - 90))
+
+    # bpms gilaki
+    if hiphop:
+        bpm_rect, bpm_sub_rect, bpm_add_rect = bpm_button()
+
 
     # save da load meniuebis daxatva
     if save_menu:
@@ -287,7 +395,10 @@ while run:
     if load_menu:
         exit_button, loading_button, delete_button, loaded_rectangle, loaded_info = draw_load_menu(index)
 
-    #
+    #mode menius daxatva
+    if mode_menu:
+        exit_button, georgian_mode_button, hiphop_mode_button, soul_mode_button = draw_mode_menu()
+
     if beat_changed:
         play_notes()
         beat_changed = False
@@ -297,7 +408,7 @@ while run:
             run = False
 
         #boxis monishvna
-        if event.type == pygame.MOUSEBUTTONDOWN and not save_menu and not load_menu: #ამით ვაზღვევთ იმას რომ ჩაწერის და გახსნის მენიუები ცალკე იყოს
+        if event.type == pygame.MOUSEBUTTONDOWN and not save_menu and not load_menu and not mode_menu: #ამით ვაზღვევთ იმას რომ ჩაწერის და გახსნის მენიუები ცალკე იყოს
             for i in range(len(boxes)):
                 #amit veubnebit tu mausi aris im poziciaze sadac boxia for loopidan
                 if boxes[i][0].collidepoint(event.pos):
@@ -305,44 +416,41 @@ while run:
                     clicked[coords[1]][coords[0]] *= -1
 
         #play/pause gilaki
-        if event.type == pygame.MOUSEBUTTONUP and not save_menu and not load_menu: #ამით ვაზღვევთ იმას რომ ჩაწერის და გახსნის მენიუები ცალკე იყოს
+        if event.type == pygame.MOUSEBUTTONUP and not save_menu and not load_menu and not mode_menu: #ამით ვაზღვევთ იმას რომ ჩაწერის და გახსნის მენიუები ცალკე იყოს
             if play_pause.collidepoint(event.pos):
                 if playing:
                     playing = False
-                    kick.stop()
-                    hihat.stop()
-                    tom.stop()
-                    crash.stop()
-                    clap.stop()
-                    snare.stop()
+                    sound3.stop()
+                    sound1.stop()
+                    sound6.stop()
+                    sound4.stop()
+                    sound5.stop()
+                    sound2.stop()
 
                 elif not playing:
                     playing = True
 
-            elif bpm_add_rect.collidepoint(event.pos):
-                bpm += 5
 
-            elif bpm_sub_rect.collidepoint(event.pos):
-                bpm -= 5
 
             elif beats_add_rect.collidepoint(event.pos):
-                beats += 1
+                beats += beatsadd
                 for i in range(len(clicked)):
-                    clicked[i].append(-1)
+                    for x in range(beatsadd):
+                        clicked[i].append(-1)
 
             elif beats_sub_rect.collidepoint(event.pos):
-                beats -= 1
+                beats -= beatsadd
                 for i in range(len(clicked)):
-                    clicked[i].pop(-1)
+                    clicked[i].pop(-1*beatsadd)
 
             elif clear_button.collidepoint(event.pos):
                 clicked = [[-1 for _ in range(beats)] for _ in range(instruments)]
-                kick.stop()
-                hihat.stop()
-                tom.stop()
-                crash.stop()
-                clap.stop()
-                snare.stop()
+                sound3.stop()
+                sound1.stop()
+                sound6.stop()
+                sound4.stop()
+                sound5.stop()
+                sound2.stop()
 
             elif save_button.collidepoint(event.pos):
                 save_menu = True
@@ -350,13 +458,27 @@ while run:
             elif load_button.collidepoint(event.pos):
                 load_menu = True
 
+            elif mode_btn.collidepoint(event.pos):
+                mode_menu = True
+
+            elif hiphop:
+
+                if bpm_add_rect.collidepoint(event.pos):
+                    bpm += 5
+
+                elif bpm_sub_rect.collidepoint(event.pos):
+                    bpm -= 5
+
+
             for i in range(len(instrument_rects)):
                 if instrument_rects[i].collidepoint(event.pos):
                     active_list[i] *= -1
+
         elif event.type == pygame.MOUSEBUTTONUP:
             if exit_button.collidepoint(event.pos):
                 save_menu = False
                 load_menu = False
+                mode_menu = False
                 playing = True
                 beat_name = ''
                 typing = False
@@ -372,7 +494,7 @@ while run:
 
                 if loading_button.collidepoint(event.pos):
                     if 0 <= index <= len(saved_beats):
-                        beats =loaded_info[0]
+                        beats = loaded_info[0]
                         bpm = loaded_info[1]
                         clicked = loaded_info[2]
                         index = 100
@@ -387,7 +509,7 @@ while run:
                         typing = True
 
                 if saving_button.collidepoint(event.pos):
-                    file = open('beats.txt', 'w')
+                    file = open('saved_beats.txt', 'w')
                     saved_beats.append(f'\nname: {beat_name}, beats: {beats}, bpm: {bpm}, selected: {clicked}')
                     for i in range(len(saved_beats)):
                         file.write(str(saved_beats[i]))
@@ -395,6 +517,42 @@ while run:
                     save_menu = False
                     typing = False
                     beat_name = ''
+
+            if mode_menu:
+                if georgian_mode_button.collidepoint(event.pos):
+                    georgian = True
+                    soul = False
+                    hiphop = False
+                    mode_menu = False
+                    bpm = 205
+                    beats = 8
+                    beatsadd = 1
+                    sound1, sound2, sound3, sound4, sound5, sound6, sound1_name, sound2_name, sound3_name, sound4_name, sound5_name, sound6_name = set_mode_opt(
+                        georgian, hiphop, soul)
+
+
+                elif hiphop_mode_button.collidepoint(event.pos):
+                    georgian = False
+                    soul = False
+                    hiphop = True
+                    mode_menu = False
+                    bpm = 160
+                    beats = 8
+                    beatsadd = 1
+                    sound1, sound2, sound3, sound4, sound5, sound6, sound1_name, sound2_name, sound3_name, sound4_name, sound5_name, sound6_name = set_mode_opt(
+                        georgian, hiphop, soul)
+
+                elif soul_mode_button.collidepoint(event.pos):
+                    georgian = False
+                    soul = True
+                    hiphop = False
+                    mode_menu = False
+                    bpm = 212
+                    beats = 6
+                    beatsadd = 3
+                    sound1, sound2, sound3, sound4, sound5, sound6, sound1_name, sound2_name, sound3_name, sound4_name, sound5_name, sound6_name = set_mode_opt(
+                        georgian, hiphop, soul)
+
 
 
         if event.type == pygame.TEXTINPUT and typing:
@@ -409,12 +567,12 @@ while run:
             if event.key == pygame.K_SPACE:
                 if playing:
                     playing = False
-                    kick.stop()
-                    hihat.stop()
-                    tom.stop()
-                    crash.stop()
-                    clap.stop()
-                    snare.stop()
+                    sound3.stop()
+                    sound1.stop()
+                    sound6.stop()
+                    sound4.stop()
+                    sound5.stop()
+                    sound2.stop()
 
                 elif not playing:
                     playing = True
