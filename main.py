@@ -520,6 +520,13 @@ while run:
 
             if mode_menu:
                 if georgian_mode_button.collidepoint(event.pos):
+                    sound3.stop()
+                    sound1.stop()
+                    sound6.stop()
+                    sound4.stop()
+                    sound5.stop()
+                    sound2.stop()
+                    clicked = [[-1 for _ in range(beats)] for _ in range(instruments)]
                     georgian = True
                     soul = False
                     hiphop = False
@@ -532,6 +539,13 @@ while run:
 
 
                 elif hiphop_mode_button.collidepoint(event.pos):
+                    sound3.stop()
+                    sound1.stop()
+                    sound6.stop()
+                    sound4.stop()
+                    sound5.stop()
+                    sound2.stop()
+                    clicked = [[-1 for _ in range(beats)] for _ in range(instruments)]
                     georgian = False
                     soul = False
                     hiphop = True
@@ -543,6 +557,13 @@ while run:
                         georgian, hiphop, soul)
 
                 elif soul_mode_button.collidepoint(event.pos):
+                    sound3.stop()
+                    sound1.stop()
+                    sound6.stop()
+                    sound4.stop()
+                    sound5.stop()
+                    sound2.stop()
+                    clicked = [[-1 for _ in range(beats)] for _ in range(instruments)]
                     georgian = False
                     soul = True
                     hiphop = False
