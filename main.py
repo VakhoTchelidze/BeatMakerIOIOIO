@@ -82,27 +82,30 @@ sound6_name = 'Fanduri'
 
 pygame.mixer.set_num_channels(instruments * 3)
 
-def play_notes():
-    for i in range(len(clicked)):
-        if clicked[i][active_beat] == 1 and active_list[i] == 1:
-            if i == 0:
-                sound1.stop()
-                sound1.play()
-            if i == 1:
-                sound2.stop()
-                sound2.play()
-            if i == 2:
-                sound3.stop()
-                sound3.play()
-            if i == 3:
-                sound4.stop()
-                sound4.play()
-            if i == 4:
-                sound5.stop()
-                sound5.play()
-            if i == 5:
-                sound6.stop()
-                sound6.play()
+class Play_notes():
+    def play_notes(self):
+        for i in range(len(clicked)):
+            if clicked[i][active_beat] == 1 and active_list[i] == 1:
+                if i == 0:
+                    sound1.stop()
+                    sound1.play()
+                if i == 1:
+                    sound2.stop()
+                    sound2.play()
+                if i == 2:
+                    sound3.stop()
+                    sound3.play()
+                if i == 3:
+                    sound4.stop()
+                    sound4.play()
+                if i == 4:
+                    sound5.stop()
+                    sound5.play()
+                if i == 5:
+                    sound6.stop()
+                    sound6.play()
+
+play_notes = Play_notes()
 
 def set_mode_opt(georgian_mode,hiphop_mode,soul_mode):
     if georgian_mode:
@@ -400,7 +403,7 @@ while run:
         exit_button, georgian_mode_button, hiphop_mode_button, soul_mode_button = draw_mode_menu()
 
     if beat_changed:
-        play_notes()
+        play_notes.play_notes()
         beat_changed = False
 
     for event in pygame.event.get():
