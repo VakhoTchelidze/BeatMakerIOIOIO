@@ -526,13 +526,13 @@ while run:
                     sound4.stop()
                     sound5.stop()
                     sound2.stop()
-                    clicked = [[-1 for _ in range(beats)] for _ in range(instruments)]
                     georgian = True
                     soul = False
                     hiphop = False
                     mode_menu = False
                     bpm = 205
                     beats = 8
+                    clicked = [[-1 for _ in range(beats)] for _ in range(instruments)]
                     beatsadd = 1
                     sound1, sound2, sound3, sound4, sound5, sound6, sound1_name, sound2_name, sound3_name, sound4_name, sound5_name, sound6_name = set_mode_opt(
                         georgian, hiphop, soul)
@@ -545,13 +545,13 @@ while run:
                     sound4.stop()
                     sound5.stop()
                     sound2.stop()
-                    clicked = [[-1 for _ in range(beats)] for _ in range(instruments)]
                     georgian = False
                     soul = False
                     hiphop = True
                     mode_menu = False
                     bpm = 160
                     beats = 8
+                    clicked = [[-1 for _ in range(beats)] for _ in range(instruments)]
                     beatsadd = 1
                     sound1, sound2, sound3, sound4, sound5, sound6, sound1_name, sound2_name, sound3_name, sound4_name, sound5_name, sound6_name = set_mode_opt(
                         georgian, hiphop, soul)
@@ -563,13 +563,13 @@ while run:
                     sound4.stop()
                     sound5.stop()
                     sound2.stop()
-                    clicked = [[-1 for _ in range(beats)] for _ in range(instruments)]
                     georgian = False
                     soul = True
                     hiphop = False
                     mode_menu = False
                     bpm = 212
                     beats = 6
+                    clicked = [[-1 for _ in range(beats)] for _ in range(instruments)]
                     beatsadd = 3
                     sound1, sound2, sound3, sound4, sound5, sound6, sound1_name, sound2_name, sound3_name, sound4_name, sound5_name, sound6_name = set_mode_opt(
                         georgian, hiphop, soul)
